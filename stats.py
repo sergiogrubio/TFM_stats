@@ -103,20 +103,22 @@ def waiting_for_results(proxy, start_time, hashes):
   return found_data
 
 NUM_TRANS = 5
-# SEC_WAIT = 40
 TIMEOUT = 1
 TOKEN = f"4142432d313039373339" # ABC-109739
 FUNCTION = "addLiquidityEgld"
 AMOUNT_EGLD = 10000000000000000 # 0.01
 ONE_EGLD = 1000000000000000000
-CONTRACT_ADDRESS = "erd1qqqqqqqqqqqqqpgq578zh88hskf9efwzyhkf64el7d6ve3lrsn2qwkvmt2";
+CONTRACT_ADDRESS = "erd1qqqqqqqqqqqqqpgqs3mnl4qnqrenzmaezf72vzeg5snpe9p0sn2qveucs5";
+PROXY = "https://devnet-gateway.elrond.com"
+CHAIN_ID = "D"
+PEM = "~/wallet/wallet3.pem"
 
-proxy = ElrondProxy("https://devnet-gateway.elrond.com")
+proxy = ElrondProxy(PROXY)
 # network settings
 network_config = proxy.get_network_config()
 # account = Account(pem_file="~/wallet/wallet1.pem")
 # account = Account(key_file="myWallet.json", pass_file="myPass.txt")
-sender = Account(pem_file="~/wallet/wallet2.pem")
+sender = Account(pem_file=PEM)
 sender.sync_nonce(proxy)
 # gas_price = proxy.estimate_gas_price()
 gas_price = network_config.min_gas_price 
@@ -126,7 +128,7 @@ print(f"Starting parallel {milli_to_time(current_milli_time())}")
 print(f"Funding ABC-xEGLD liquidity pool with {AMOUNT_EGLD*NUM_TRANS/ONE_EGLD} xEGLD among {NUM_TRANS} transactions")
 print(f"Please wait a few seconds")
 # sending a bunch of transactions together
-start_time, num, hashes = send_transactions(proxy, NUM_TRANS, AMOUNT_EGLD, CONTRACT_ADDRESS, gas_price , gas_limit, FUNCTION + "@" + TOKEN, "D", 1)
+start_time, num, hashes = send_transactions(proxy, NUM_TRANS, AMOUNT_EGLD, CONTRACT_ADDRESS, gas_price , gas_limit, FUNCTION + "@" + TOKEN, CHAIN_ID, 1)
 print(f"{num} transactions were sent")
 
 # waiting for the transaction to end, only with success status
